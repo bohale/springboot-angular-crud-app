@@ -11,26 +11,36 @@ import { Router } from '@angular/router';
 export class CreateEmployeeComponent implements OnInit {
 
   employee: Employee = new Employee(); 
-  constructor(private employeeService: EmployeeService,
-    private router: Router) { };
+
+  //inject Employee Service, Router 
+  constructor(
+    private employeeService: EmployeeService,
+    private router: Router
+  ) { };
 
   ngOnInit(): void {
   }
 
+  //save employee
   saveEmployee() {
     this.employeeService.createEmployee(this.employee).subscribe( data => {
         console.log(data);
+        this.goToEmployeeList();
         },
         error => console.log(error)
     );
   }
 
+  //list of employees
   goToEmployeeList(){
     this.router.navigate(['/employees']);
   }
 
+  //employee details from Submit form
+  //go save
   onSubmit() {
     console.log(this.employee)
     this.saveEmployee();
+    //this.goToEmployeeList();
   }
 }
