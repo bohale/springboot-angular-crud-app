@@ -1,8 +1,10 @@
 package com.example.backend.controller;
 
+import com.example.backend.exception.ResourceNotFoundException;
 import com.example.backend.model.Employee;
 import com.example.backend.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,5 +26,28 @@ public class EmployeeController {
     @PostMapping("/employees")
     public Employee createEmployee(@RequestBody Employee employee) {
         return employeeRepository.save(employee);
+    }
+
+    // get employee by Id
+    @GetMapping("/employees/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+       Employee employee = employeeRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(("Employee of Id " + id + " does not exist")));
+       return ResponseEntity.ok(employee);                       //returning HTTP_OK status and employee
+    }
+
+    //update employee
+    @PutMapping("/employees/{id}")
+    public ResponseEntity<Employee> updateEmployeeById(@PathVariable Long id, @RequestBody Employee employeeDetails) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(("Employee of Id " + id + " does not exist")));
+
+        //override old details
+        employee.setFirstName(employeeDetails.getFirstName());
+        employee.setLastName(employeeDetails.getLastName());
+        employee.setEmailId(employeeDetails.getEmailId());
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        return ResponseEntity.ok(savedEmployee);                       //returning HTTP_OK status and employee
     }
 }
