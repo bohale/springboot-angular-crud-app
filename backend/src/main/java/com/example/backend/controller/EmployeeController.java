@@ -49,7 +49,6 @@ public class EmployeeController {
         employee.setLastName(employeeDetails.getLastName());
         employee.setEmailId(employeeDetails.getEmailId());
         Employee savedEmployee = employeeRepository.save(employee);
-
         return ResponseEntity.ok(savedEmployee);                       //returning HTTP_OK status and employee
     }
 
@@ -63,6 +62,5 @@ public class EmployeeController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
-
     }
 }
